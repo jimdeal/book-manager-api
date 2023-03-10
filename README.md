@@ -51,12 +51,15 @@ The features are:
 
 📘 Extension Task: Oh no! 😭 We've only covered the happy paths in the solution, can you figure out a way
 to add in exception handling to the project? 
->> some error / exception hamdling added (most notably - changing some operations to return error if operation not successful)
+
+some error / exception hamdling added (most notably - changing some operations to return error if operation not successful)
 
 - Clue 1: What if someone wants to add a book with an ID for a book that already exists? How do we handle this gracefully?
 - Clue 2: What if someone wants to find a book by an ID that doesn't yet exist? 
 
 >> add in a "getBookById" check prior : 
+
+
 On add by with existing id : if a book is returned - don't add book & send back Can't process add error.
 
 On find book with id that doesn't exist - : if a book is not returned & send back Can't process add error.

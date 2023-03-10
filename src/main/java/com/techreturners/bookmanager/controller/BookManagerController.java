@@ -25,7 +25,11 @@ public class BookManagerController {
 
     @GetMapping({"/{bookId}"})
     public ResponseEntity<Book> getBookById(@PathVariable Long bookId) {
-        return new ResponseEntity<>(bookManagerService.getBookById(bookId), HttpStatus.OK);
+        Book temp = bookManagerService.getBookById(bookId);
+        if(temp == null){
+            return ResponseEntity.unprocessableEntity().build();
+        }
+        return new ResponseEntity<>(temp, HttpStatus.OK);
     }
 
     @PostMapping
@@ -39,8 +43,30 @@ public class BookManagerController {
     //User Story 4 - Update Book By Id Solution
     @PutMapping({"/{bookId}"})
     public ResponseEntity<Book> updateBookById(@PathVariable("bookId") Long bookId, @RequestBody Book book) {
+        Book temp = bookManagerService.getBookById(bookId);
+        if(temp == null){
+            return ResponseEntity.unprocessableEntity().build();
+        }
         bookManagerService.updateBookById(bookId, book);
         return new ResponseEntity<>(bookManagerService.getBookById(bookId), HttpStatus.OK);
+    }
+
+    @DeleteMapping({"/{bookId}"})
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public ResponseEntity<?> deleteBookById(@PathVariable("bookId") Long bookId){
+        boolean success = false;
+        try{
+            Book temp = bookManagerService.getBookById(bookId);
+            if(temp != null){
+                bookManagerService.deleteBookById(bookId);
+            } else{
+                return ResponseEntity.unprocessableEntity().build();
+            }
+
+        } catch (Exception exception){
+            return ResponseEntity.unprocessableEntity().build();
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

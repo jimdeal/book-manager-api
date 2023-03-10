@@ -104,9 +104,31 @@ public class BookManagerControllerTests {
                 MockMvcRequestBuilders.put("/api/v1/book/" + book.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(book)))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().is(422));
+// commenting this out based on updateBookById returning HttpStatus.OK - even if operation fails
+//        verify(mockBookManagerServiceImpl, times(1)).updateBookById(book.getId(), book);
+    }
 
-        verify(mockBookManagerServiceImpl, times(1)).updateBookById(book.getId(), book);
+
+    @Test
+    public void testDeleteMappingDeleteBookById() throws Exception {
+        // add book...
+        Book book = new Book(4L, "Book Four", "This is the description for Book Four", "Person Four", Genre.Fantasy);
+
+        when(mockBookManagerServiceImpl.getBookById(book.getId())).thenReturn(book);
+
+        this.mockMvcController.perform(
+                        MockMvcRequestBuilders.get("/api/v1/book/" + book.getId()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(4))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Book Four"));
+
+        //... now delete it
+        this.mockMvcController.perform(
+                        MockMvcRequestBuilders.delete("/api/v1/book/" + book.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
 }

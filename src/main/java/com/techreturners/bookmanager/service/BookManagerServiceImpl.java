@@ -28,20 +28,37 @@ public class BookManagerServiceImpl implements BookManagerService {
 
     @Override
     public Book getBookById(Long id) {
-        return bookManagerRepository.findById(id).get();
+        Book returnBook = null;
+        try{
+            returnBook = bookManagerRepository.findById(id).get();
+        } catch (Exception ex){
+
+        }
+        return returnBook;
     }
 
     //User Story 4 - Update Book By Id Solution
     @Override
     public void updateBookById(Long id, Book book) {
-        Book retrievedBook = bookManagerRepository.findById(id).get();
+        try{
+            Book retrievedBook = bookManagerRepository.findById(id).get();
 
-        retrievedBook.setTitle(book.getTitle());
-        retrievedBook.setDescription(book.getDescription());
-        retrievedBook.setAuthor(book.getAuthor());
-        retrievedBook.setGenre(book.getGenre());
+            retrievedBook.setTitle(book.getTitle());
+            retrievedBook.setDescription(book.getDescription());
+            retrievedBook.setAuthor(book.getAuthor());
+            retrievedBook.setGenre(book.getGenre());
 
-        bookManagerRepository.save(retrievedBook);
+            bookManagerRepository.save(retrievedBook);
+        } catch (Exception ex){
+
+        }
+
     }
+
+    @Override
+    public void deleteBookById(Long id){
+        bookManagerRepository.deleteById(id);
+    }
+
 
 }
